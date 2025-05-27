@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulateur PC AVS/AI</title>
+    <style>
+        :root {
+            --primary-color: #3a7ca5;
+            --secondary-color: #16a085;
+            --light-color: #f5f7fa;
+            --dark-color: #2c3e50;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --success-color: #27ae60;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--light-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            background-color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background-color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--dark-color);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .section {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #219653;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+
+        .form-col {
+            flex: 1;
+            padding: 0 10px;
+            min-width: 250px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e6e9ed;
+        }
+
+        .success-text {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .warning-text {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        .danger-text {
+            color: var(--danger-color);
+            font-weight: bold;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-weight: bold;
+        }
+
+        .summary-value {
+            text-align: right;
+        }
+
+        .total-row {
+            font-weight: bold;
+            border-top: 2px solid #ddd;
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--dark-color);
+            color: white;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .form-col {
+                flex: 100%;
+            }
+
+            nav {
+                flex-wrap: wrap;
+            }
+
+            .nav-btn {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Simulateur PC AVS/AI</h1>
+        <p>Calculez votre éligibilité aux prestations complémentaires AVS/AI</p>
+    </header>
+
+    <nav>
+        <button class="nav-btn active" onclick="showSection('personal')">Informations personnelles</button>
+        <button class="nav-btn" onclick="showSection('income')">Revenus</button>
+        <button class="nav-btn" onclick="showSection('fortune')">Fortune</button>
+        <button class="nav-btn" onclick="showSection('expenses')">Dépenses</button>
+        <button class="nav-btn" onclick="showSection('results')">Résultats</button>
+    </nav>
+
+    <div class="container">
+        <div id="personal" class="section active">
+            <h2>Informations personnelles</h2>
+
+            <div class="card">
+                <div class="form-group">
+                    <label for="situation">Situation:</label>
+                    <select id="situation" onchange="updateFormFields()">
+                        <option value="single">Personne seule</option>
+                        <option value="couple" selected>Couple</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="name1">Prénom (personne 1):</label>
+                            <input type="text" id="name1" value="Jean">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age1">Âge (personne 1):</label>
+                            <input type="number" id="age1" min="0" max="120" value="80">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ems1">Situation EMS (personne 1):</label>
+                            <select id="ems1">
+                                <option value="home">À domicile</option>
+                                <option value="ems" selected>En EMS</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-col" id="person2Fields">
+                        <div class="form-group">
+                            <label for="name2">Prénom (personne 2):</label>
+                            <input type="text" id="name2" value="Marie">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age2">Âge (personne 2):</label>
+                            <input type="number" id="age2" min="0" max="120" value="76">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ems2">Situation EMS (personne 2):</label>
+                            <select id="ems2">
+                                <option value="home" selected>À domicile</option>
+                                <option value="ems">En EMS</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="canton">Canton:</label>
+                            <select id="canton">
+                                <option value="vd" selected>Vaud</option>
+                                <option value="ge">Genève</option>
+                                <option value="ne">Neuchâtel</option>
+                                <option value="fr">Fribourg</option>
+                                <option value="vs">Valais</option>
+                                <option value="ju">Jura</option>
+                                <option value="be">Berne</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="commune">Commune:</label>
+                            <input type="text" id="commune" value="Lausanne">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="showSection('income')" class="btn-success">Suivant: Revenus</button>
+            </div>
+        </div>
+
+        <div id="income" class="section">
+            <h2>Revenus</h2>
+
+            <div class="card">
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="avs">Rentes AVS annuelles (CHF):</label>
+                            <input type="number" id="avs" min="0" value="44100">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lpp">Rente LPP annuelle (CHF):</label>
+                            <input type="number" id="lpp" min="0" value="15000">
+                        </div>
+                    </div>
+
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="other_income">Autres revenus annuels (CHF):</label>
+                            <input type="number" id="other_income" min="0" value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fortune_income">Revenus de la fortune (CHF):</label>
+                            <input type="number" id="fortune_income" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="summary-item total-row">
+                        <span class="summary-label">Revenus totaux annuels:</span>
+                        <span class="summary-value" id="total_income">59 100 CHF</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <button onclick="showSection('personal')" class="btn-warning">Précédent</button>
+                    </div>
+                    <div class="form-col" style="text-align: right;">
+                        <button onclick="showSection('fortune')" class="btn-success">Suivant: Fortune</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="fortune" class="section">
+            <h2>Fortune</h2>
+
+            <div class="card">
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="property_value">Valeur du bien immobilier (CHF):</label>
+                            <input type="number" id="property_value" min="0" value="1000000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mortgage">Dette hypothécaire (CHF):</label>
+                            <input type="number" id="mortgage" min="0" value="200000">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="summary-item">
+                                <span class="summary-label">Fortune immobilière nette:</span>
+                                <span class="summary-value" id="net_property">800 000 CHF</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="liquid_assets">Fortune mobilière (CHF):</label>
+                            <input type="number" id="liquid_assets" min="0" value="250000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="other_assets">Autres biens (CHF):</label>
+                            <input type="number" id="other_assets" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="summary-item total-row">
+                        <span class="summary-label">Fortune totale:</span>
+                        <span class="summary-value" id="total_fortune">1 050 000 CHF</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <button onclick="showSection('income')" class="btn-warning">Précédent</button>
+                    </div>
+                    <div class="form-col" style="text-align: right;">
+                        <button onclick="showSection('expenses')" class="btn-success">Suivant: Dépenses</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="expenses" class="section">
+            <h2>Dépenses</h2>
+
+            <div class="card">
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group" id="ems_cost_group">
+                            <label for="ems_cost">Coût EMS par jour (CHF):</label>
+                            <input type="number" id="ems_cost" min="0" value="250">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="summary-item">
+                                <span class="summary-label">Coût EMS annuel:</span>
+                                <span class="summary-value" id="annual_ems_cost">91 250 CHF</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="home_expenses_group">
+                            <label for="home_expenses">Dépenses annuelles à domicile (CHF):</label>
+                            <input type="number" id="home_expenses" min="0" value="40000">
+                        </div>
+                    </div>
+
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="health_insurance">Prime maladie annuelle par personne (CHF):</label>
+                            <input type="number" id="health_insurance" min="0" value="5280">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="medical_expenses">Frais médicaux non remboursés (CHF):</label>
+                            <input type="number" id="medical_expenses" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="summary-item total-row">
+                        <span class="summary-label">Dépenses totales annuelles:</span>
+                        <span class="summary-value" id="total_expenses">141 810 CHF</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <button onclick="showSection('fortune')" class="btn-warning">Précédent</button>
+                    </div>
+                    <div class="form-col" style="text-align: right;">
+                        <button onclick="calculateResults()" class="btn-success">Calculer les résultats</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="results" class="section">
+            <h2>Résultats de la simulation</h2>
+
+            <div class="card">
+                <h3>Bilan financier annuel</h3>
+                <div class="summary-item">
+                    <span class="summary-label">Dépenses annuelles totales:</span>
+                    <span class="summary-value" id="result_expenses">141 810 CHF</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Revenus annuels totaux:</span>
+                    <span class="summary-value" id="result_income">59 100 CHF</span>
+                </div>
+                <div class="summary-item total-row">
+                    <span class="summary-label">Déficit annuel à financer par la fortune:</span>
+                    <span class="summary-value" id="annual_deficit">82 710 CHF</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Évolution de la fortune mobilière</h3>
+                <div class="chart-container">
+                    <canvas id="fortuneChart"></canvas>
+                </div>
+
+                <table id="fortune_table">
+                    <thead>
+                        <tr>
+                            <th>Année</th>
+                            <th>Fortune mobilière</th>
+                            <th>Déficit annuel</th>
+                            <th>Éligibilité PC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fortune_table_body">
+                        <!-- Rempli par JavaScript -->
+                    </tbody>
+                </table>
+
+                <p><strong>Conclusion: </strong><span id="fortune_conclusion">La fortune mobilière sera épuisée en 2029 (dans environ 4 ans).</span></p>
+            </div>
+
+            <div class="card">
+                <h3>Éligibilité aux prestations complémentaires</h3>
+                <p id="pc_eligibility" class="success-text">⚠️ La fortune mobilière passera sous le seuil d'éligibilité PC dès la 2ème année (2026). Une demande de PC sera possible à ce moment-là.</p>
+                <p><strong>Montant PC estimé: </strong><span id="pc_amount">82 710 CHF/an</span></p>
+                <p><em>Ce montant est une estimation. Le calcul officiel sera effectué par la caisse de compensation.</em></p>
+            </div>
+
+            <div class="card">
+                <h3>Détail du calcul</h3>
+
+                <h4>Dépenses</h4>
+                <div id="expenses_detail">
+                    <p>- Dépenses EMS: 91 250 CHF/an</p>
+                    <p>- Dépenses à domicile: 40 000 CHF/an</p>
+                    <p>- Primes maladie: 10 560 CHF/an</p>
+                    <p>- Frais médicaux: 0 CHF/an</p>
+                    <p><strong>Total: 141 810 CHF/an</strong></p>
+                </div>
+
+                <h4>Revenus</h4>
+                <div id="income_detail">
+                    <p>- Rentes AVS: 44 100 CHF/an</p>
+                    <p>- Rente LPP: 15 000 CHF/an</p>
+                    <p>- Autres revenus: 0 CHF/an</p>
+                    <p>- Revenus fortune: 0 CHF/an</p>
+                    <p><strong>Total: 59 100 CHF/an</strong></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Recommandations</h3>
+                <ol id="recommendations">
+                    <li>Préparer une demande de PC pour début 2026 (ou avant si la fortune mobilière diminue plus rapidement que prévu)</li>
+                    <li>Consulter un spécialiste en assurances sociales pour optimiser la situation</li>
+                    <li>Vérifier si des adaptations du logement de Madame sont nécessaires pour le maintien à domicile</li>
+                    <li>Évaluer les options concernant le bien immobilier (conserver, vendre, etc.)</li>
+                </ol>
+            </div>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <button onclick="showSection('expenses')" class="btn-warning">Précédent</button>
+                </div>
+                <div class="form-col" style="text-align: right;">
+                    <button onclick="printResults()" class="btn-success">Imprimer les résultats</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 PC AVS/AI Simulator | Développé par PatrimoineEMS</p>
+        <p><small>Cette application est fournie à titre informatif uniquement. Les calculs sont des estimations et peuvent différer des montants officiels.</small></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Variables globales
+        let fortuneChart = null;
+        const currentYear = new Date().getFullYear();
+
+        // Fonction pour afficher une section
+        function showSection(sectionId) {
+            // Cacher toutes les sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Afficher la section demandée
+            document.getElementById(sectionId).classList.add('active');
+
+            // Mettre à jour les boutons de navigation
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Trouver le bouton correspondant à la section et l'activer
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.getAttribute('onclick').includes(sectionId)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Mettre à jour les calculs si nécessaire
+            updateCalculations();
+        }
+
+        // Fonction pour mettre à jour les champs du formulaire en fonction de la situation
+        function updateFormFields() {
+            const situation = document.getElementById('situation').value;
+            const person2Fields = document.getElementById('person2Fields');
+
+            if (situation === 'single') {
+                person2Fields.style.display = 'none';
+            } else {
+                person2Fields.style.display = 'block';
+            }
+
+            updateCalculations();
+        }
+
+        // Fonction pour mettre à jour les calculs
+        function updateCalculations() {
+            // Calcul des revenus
+            const avs = parseFloat(document.getElementById('avs').value) || 0;
+            const lpp = parseFloat(document.getElementById('lpp').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('other_income').value) || 0;
+            const fortuneIncome = parseFloat(document.getElementById('fortune_income').value) || 0;
+
+            const totalIncome = avs + lpp + otherIncome + fortuneIncome;
+            document.getElementById('total_income').textContent = formatCurrency(totalIncome);
+
+            // Calcul de la fortune
+            const propertyValue = parseFloat(document.getElementById('property_value').value) || 0;
+            const mortgage = parseFloat(document.getElementById('mortgage').value) || 0;
+            const liquidAssets = parseFloat(document.getElementById('liquid_assets').value) || 0;
+            const otherAssets = parseFloat(document.getElementById('other_assets').value) || 0;
+
+            const netProperty = propertyValue - mortgage;
+            const totalFortune = netProperty + liquidAssets + otherAssets;
+
+            document.getElementById('net_property').textContent = formatCurrency(netProperty);
+            document.getElementById('total_fortune').textContent = formatCurrency(totalFortune);
+
+            // Calcul des dépenses
+            const emsCost = parseFloat(document.getElementById('ems_cost').value) || 0;
+            const homeExpenses = parseFloat(document.getElementById('home_expenses').value) || 0;
+            const healthInsurance = parseFloat(document.getElementById('health_insurance').value) || 0;
+            const medicalExpenses = parseFloat(document.getElementById('medical_expenses').value) || 0;
+
+            // Déterminer le nombre de personnes
+            const situation = document.getElementById('situation').value;
+            const numberOfPeople = situation === 'single' ? 1 : 2;
+
+            // Déterminer si EMS
+            const ems1 = document.getElementById('ems1').value === 'ems';
+            const ems2 = document.getElementById('ems2').value === 'ems';
+
+            // Calculer le coût annuel EMS
+            let annualEmsCost = 0;
+            if (ems1) {
+                annualEmsCost += emsCost * 365;
+            }
+            if (situation === 'couple' && ems2) {
+                annualEmsCost += emsCost * 365;
+            }
+
+            document.getElementById('annual_ems_cost').textContent = formatCurrency(annualEmsCost);
+
+            // Calculer les dépenses totales
+            const totalHealthInsurance = healthInsurance * numberOfPeople;
+            const totalExpenses = annualEmsCost + homeExpenses + totalHealthInsurance + medicalExpenses;
+
+            document.getElementById('total_expenses').textContent = formatCurrency(totalExpenses);
+        }
+
+        // Fonction pour calculer les résultats
+        function calculateResults() {
+            // Afficher la section des résultats
+            showSection('results');
+
+            // Récupérer les valeurs calculées
+            const totalExpenses = parseFloat(document.getElementById('total_expenses').textContent.replace(/[^\d.-]/g, '')) || 0;
+            const totalIncome = parseFloat(document.getElementById('total_income').textContent.replace(/[^\d.-]/g, '')) || 0;
+            const liquidAssets = parseFloat(document.getElementById('liquid_assets').value) || 0;
+
+            // Calculer le déficit annuel
+            const annualDeficit = Math.max(0, totalExpenses - totalIncome);
+
+            // Mettre à jour les résultats
+            document.getElementById('result_expenses').textContent = formatCurrency(totalExpenses);
+            document.getElementById('result_income').textContent = formatCurrency(totalIncome);
+            document.getElementById('annual_deficit').textContent = formatCurrency(annualDeficit);
+
+            // Calculer l'évolution de la fortune
+            calculateFortuneEvolution(liquidAssets, annualDeficit);
+
+            // Mettre à jour les détails du calcul
+            updateCalculationDetails();
+
+            // Générer les recommandations
+            generateRecommendations();
+        }
+
+        // Fonction pour calculer l'évolution de la fortune
+        function calculateFortuneEvolution(initialFortune, annualDeficit) {
+            const years = 10;
+            const fortuneData = [];
+            const labels = [];
+            const tableBody = document.getElementById('fortune_table_body');
+
+            // Vider le tableau
+            tableBody.innerHTML = '';
+
+            let remainingFortune = initialFortune;
+            let depletionYear = null;
+
+            for (let i = 0; i <= years; i++) {
+                const year = currentYear + i;
+                labels.push(year.toString());
+
+                // Si la fortune est déjà épuisée, elle reste à 0
+                if (remainingFortune <= 0 && i > 0) {
+                    remainingFortune = 0;
+                }
+
+                fortuneData.push(remainingFortune);
+
+                // Déterminer l'éligibilité PC (seuil arbitraire de 100 000 CHF pour un couple)
+                const eligibilityThreshold = 100000;
+                let eligibility = '';
+                let eligibilityClass = '';
+
+                if (remainingFortune <= eligibilityThreshold) {
+                    eligibility = 'Éligible';
+                    eligibilityClass = 'success-text';
+                } else {
+                    eligibility = 'Non éligible';
+                    eligibilityClass = 'warning-text';
+                }
+
+                // Ajouter une ligne au tableau
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${year}</td>
+                    <td>${formatCurrency(remainingFortune)}</td>
+                    <td>${i === 0 ? '0 CHF' : formatCurrency(annualDeficit)}</td>
+                    <td class="${eligibilityClass}">${eligibility}</td>
+                `;
+                tableBody.appendChild(row);
+
+                // Déterminer l'année d'épuisement de la fortune
+                if (remainingFortune <= 0 && depletionYear === null && i > 0) {
+                    depletionYear = year;
+                }
+
+                // Soustraire le déficit pour l'année suivante
+                remainingFortune -= annualDeficit;
+            }
+
+            // Mettre à jour la conclusion
+            if (depletionYear) {
+                const yearsUntilDepletion = depletionYear - currentYear;
+                document.getElementById('fortune_conclusion').textContent = `La fortune mobilière sera épuisée en ${depletionYear} (dans environ ${yearsUntilDepletion} ans).`;
+            } else if (annualDeficit > 0) {
+                document.getElementById('fortune_conclusion').textContent = `La fortune mobilière sera suffisante pour plus de 10 ans avec le déficit actuel.`;
+            } else {
+                document.getElementById('fortune_conclusion').textContent = `Aucun déficit annuel, la fortune ne sera pas entamée.`;
+            }
+
+            // Mettre à jour l'éligibilité PC
+            updatePCEligibility(fortuneData, labels);
+
+            // Créer ou mettre à jour le graphique
+            createFortuneChart(labels, fortuneData);
+        }
+
+        // Fonction pour mettre à jour l'éligibilité PC
+        function updatePCEligibility(fortuneData, years) {
+            const eligibilityThreshold = 100000;
+            let eligibleYear = null;
+
+            for (let i = 1; i < fortuneData.length; i++) {
+                if (fortuneData[i] <= eligibilityThreshold) {
+                    eligibleYear = years[i];
+                    break;
+                }
+            }
+
+            const pcEligibilityElement = document.getElementById('pc_eligibility');
+            const annualDeficit = parseFloat(document.getElementById('annual_deficit').textContent.replace(/[^\d.-]/g, '')) || 0;
+
+            if (eligibleYear) {
+                const yearsUntilEligible = parseInt(eligibleYear) - currentYear;
+                pcEligibilityElement.textContent = `⚠️ La fortune mobilière passera sous le seuil d'éligibilité PC dès la ${yearsUntilEligible}ème année (${eligibleYear}). Une demande de PC sera possible à ce moment-là.`;
+                pcEligibilityElement.className = 'success-text';
+                document.getElementById('pc_amount').textContent = `${formatCurrency(annualDeficit)}/an`;
+            } else {
+                pcEligibilityElement.textContent = `La fortune mobilière restera au-dessus du seuil d'éligibilité PC pendant au moins 10 ans.`;
+                pcEligibilityElement.className = 'warning-text';
+                document.getElementById('pc_amount').textContent = `Non applicable`;
+            }
+        }
+
+        // Fonction pour créer le graphique d'évolution de la fortune
+        function createFortuneChart(labels, fortuneData) {
+            const ctx = document.getElementById('fortuneChart').getContext('2d');
+
+            // Détruire le graphique existant s'il y en a un
+            if (fortuneChart) {
+                fortuneChart.destroy();
+            }
+
+            // Créer un nouveau graphique
+            fortuneChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Fortune mobilière (CHF)',
+                        data: fortuneData,
+                        backgroundColor: 'rgba(58, 124, 165, 0.2)',
+                        borderColor: 'rgba(58, 124, 165, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(58, 124, 165, 1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + ' CHF';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' CHF';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Fonction pour mettre à jour les détails du calcul
+        function updateCalculationDetails() {
+            const situation = document.getElementById('situation').value;
+            const numberOfPeople = situation === 'single' ? 1 : 2;
+
+            const emsCost = parseFloat(document.getElementById('ems_cost').value) || 0;
+            const homeExpenses = parseFloat(document.getElementById('home_expenses').value) || 0;
+            const healthInsurance = parseFloat(document.getElementById('health_insurance').value) || 0;
+            const medicalExpenses = parseFloat(document.getElementById('medical_expenses').value) || 0;
+
+            const ems1 = document.getElementById('ems1').value === 'ems';
+            const ems2 = situation === 'couple' ? document.getElementById('ems2').value === 'ems' : false;
+
+            let annualEmsCost = 0;
+            if (ems1) {
+                annualEmsCost += emsCost * 365;
+            }
+            if (ems2) {
+                annualEmsCost += emsCost * 365;
+            }
+
+            const totalHealthInsurance = healthInsurance * numberOfPeople;
+
+            // Mettre à jour les détails des dépenses
+            let expensesDetail = '';
+            if (annualEmsCost > 0) {
+                expensesDetail += `<p>- Dépenses EMS: ${formatCurrency(annualEmsCost)}/an</p>`;
+            }
+            if (homeExpenses > 0) {
+                expensesDetail += `<p>- Dépenses à domicile: ${formatCurrency(homeExpenses)}/an</p>`;
+            }
+            expensesDetail += `<p>- Primes maladie: ${formatCurrency(totalHealthInsurance)}/an</p>`;
+            if (medicalExpenses > 0) {
+                expensesDetail += `<p>- Frais médicaux: ${formatCurrency(medicalExpenses)}/an</p>`;
+            }
+
+            const totalExpenses = annualEmsCost + homeExpenses + totalHealthInsurance + medicalExpenses;
+            expensesDetail += `<p><strong>Total: ${formatCurrency(totalExpenses)}/an</strong></p>`;
+
+            document.getElementById('expenses_detail').innerHTML = expensesDetail;
+
+            // Mettre à jour les détails des revenus
+            const avs = parseFloat(document.getElementById('avs').value) || 0;
+            const lpp = parseFloat(document.getElementById('lpp').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('other_income').value) || 0;
+            const fortuneIncome = parseFloat(document.getElementById('fortune_income').value) || 0;
+
+            let incomeDetail = '';
+            incomeDetail += `<p>- Rentes AVS: ${formatCurrency(avs)}/an</p>`;
+            if (lpp > 0) {
+                incomeDetail += `<p>- Rente LPP: ${formatCurrency(lpp)}/an</p>`;
+            }
+            if (otherIncome > 0) {
+                incomeDetail += `<p>- Autres revenus: ${formatCurrency(otherIncome)}/an</p>`;
+            }
+            if (fortuneIncome > 0) {
+                incomeDetail += `<p>- Revenus fortune: ${formatCurrency(fortuneIncome)}/an</p>`;
+            }
+
+            const totalIncome = avs + lpp + otherIncome + fortuneIncome;
+            incomeDetail += `<p><strong>Total: ${formatCurrency(totalIncome)}/an</strong></p>`;
+
+            document.getElementById('income_detail').innerHTML = incomeDetail;
+        }
+
+        // Fonction pour générer des recommandations
+        function generateRecommendations() {
+            const annualDeficit = parseFloat(document.getElementById('annual_deficit').textContent.replace(/[^\d.-]/g, '')) || 0;
+            const situation = document.getElementById('situation').value;
+            const name1 = document.getElementById('name1').value || 'Personne 1';
+            const name2 = document.getElementById('name2').value || 'Personne 2';
+            const ems1 = document.getElementById('ems1').value === 'ems';
+            const ems2 = situation === 'couple' ? document.getElementById('ems2').value === 'ems' : false;
+
+            let recommendations = [];
+
+            // Recommandation concernant les PC
+            const pcEligibilityText = document.getElementById('pc_eligibility').textContent;
+            if (pcEligibilityText.includes('sera possible')) {
+                const eligibleYear = pcEligibilityText.match(/\((\d+)\)/)[1];
+                recommendations.push(`Préparer une demande de PC pour début ${eligibleYear} (ou avant si la fortune mobilière diminue plus rapidement que prévu)`);
+            }
+
+            // Recommandation générale
+            recommendations.push(`Consulter un spécialiste en assurances sociales pour optimiser la situation`);
+
+            // Recommandations spécifiques
+            if (situation === 'couple') {
+                if (ems1 && !ems2) {
+                    recommendations.push(`Vérifier si des adaptations du logement de ${name2} sont nécessaires pour le maintien à domicile`);
+                } else if (!ems1 && ems2) {
+                    recommendations.push(`Vérifier si des adaptations du logement de ${name1} sont nécessaires pour le maintien à domicile`);
+                }
+            }
+
+            // Recommandation concernant le bien immobilier
+            const propertyValue = parseFloat(document.getElementById('property_value').value) || 0;
+            if (propertyValue > 0) {
+                recommendations.push(`Évaluer les options concernant le bien immobilier (conserver, vendre, etc.)`);
+            }
+
+            // Mettre à jour les recommandations
+            const recommendationsElement = document.getElementById('recommendations');
+            recommendationsElement.innerHTML = '';
+
+            recommendations.forEach(recommendation => {
+                const li = document.createElement('li');
+                li.textContent = recommendation;
+                recommendationsElement.appendChild(li);
+            });
+        }
+
+        // Fonction pour imprimer les résultats
+        function printResults() {
+            window.print();
+        }
+
+        // Fonction pour formater les montants en CHF
+        function formatCurrency(amount) {
+            return amount.toLocaleString('fr-CH') + ' CHF';
+        }
+
+        // Initialiser l'application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateFormFields();
+            updateCalculations();
+
+            // Ajouter des écouteurs d'événements pour les champs de formulaire
+            document.querySelectorAll('input, select').forEach(element => {
+                element.addEventListener('change', updateCalculations);
+                element.addEventListener('input', updateCalculations);
+            });
+        });
+    </script>
+</body>
+</html>
