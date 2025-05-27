@@ -6,13 +6,14 @@
     <title>Simulateur PC AVS/AI</title>
     <style>
         :root {
-            --primary-color: #3a7ca5;
+            --primary-color: #0a4c75;
             --secondary-color: #16a085;
             --light-color: #f5f7fa;
             --dark-color: #2c3e50;
             --danger-color: #e74c3c;
             --warning-color: #f39c12;
             --success-color: #27ae60;
+            --highlight-color: #f1f8ff;
         }
 
         * {
@@ -278,6 +279,127 @@
             height: 300px;
             margin: 20px 0;
         }
+
+        .result-box {
+            background-color: var(--highlight-color);
+            border: 1px solid #d1e3fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .result-amount {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .result-annual {
+            color: #666;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .result-distribution {
+            margin-top: 20px;
+            border-top: 1px solid #d1e3fa;
+            padding-top: 15px;
+        }
+
+        .distribution-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .distribution-label {
+            font-weight: 500;
+        }
+
+        .distribution-value {
+            font-weight: bold;
+        }
+
+        .calculation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .calculation-table th {
+            background-color: #f1f8ff;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #d1e3fa;
+        }
+
+        .calculation-table td {
+            padding: 8px 10px;
+            border: 1px solid #d1e3fa;
+        }
+
+        .calculation-table .amount-col {
+            text-align: right;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+
+        .calculation-table .total-row {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+
+        .calculation-result {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .info-note {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+
+        .fortune-section {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .fortune-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .rule-note {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -540,22 +662,194 @@
             <h2>Résultats de la simulation</h2>
 
             <div class="card">
-                <h3>Bilan financier annuel</h3>
-                <div class="summary-item">
-                    <span class="summary-label">Dépenses annuelles totales:</span>
-                    <span class="summary-value" id="result_expenses">141 810 CHF</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-label">Revenus annuels totaux:</span>
-                    <span class="summary-value" id="result_income">59 100 CHF</span>
-                </div>
-                <div class="summary-item total-row">
-                    <span class="summary-label">Déficit annuel à financer par la fortune:</span>
-                    <span class="summary-value" id="annual_deficit">82 710 CHF</span>
-                </div>
-            </div>
+                <div class="result-box">
+                    <div class="result-title">Résultat de la simulation PC EMS 2025</div>
+                    <p class="text-center" style="font-size: 0.8rem; color: #666; margin-bottom: 20px;">Estimation non contractuelle selon la législation en vigueur dès le 1er janvier 2025</p>
 
-            <div class="card">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div style="text-align: center;">
+                                <h3>Droit mensuel aux PC</h3>
+                                <div class="result-amount" id="monthly_pc">5 276 CHF</div>
+                                <div class="result-annual" id="annual_pc">63 315 CHF par an</div>
+                            </div>
+                        </div>
+
+                        <div class="form-col">
+                            <div style="margin-top: 10px;">
+                                <h3>Répartition</h3>
+                                <div class="distribution-item">
+                                    <span class="distribution-label">Pour le résident en EMS:</span>
+                                    <span class="distribution-value" id="ems_pc_share">3 957 CHF / mois</span>
+                                </div>
+                                <div class="distribution-item">
+                                    <span class="distribution-label">Pour le conjoint à domicile:</span>
+                                    <span class="distribution-value" id="home_pc_share">1 319 CHF / mois</span>
+                                </div>
+                                <p style="font-size: 0.8rem; color: #666; margin-top: 10px;">Répartition selon la règle légale : 1/3 pour le résident EMS, 2/3 pour le conjoint à domicile</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Détail du calcul</h3>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <h4>Dépenses reconnues</h4>
+                        <table class="calculation-table">
+                            <tbody id="expenses_detail_table">
+                                <tr>
+                                    <td>Frais EMS (365 jours)</td>
+                                    <td class="amount-col">91 250 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Assurance maladie</td>
+                                    <td class="amount-col">10 560 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Dépenses personnelles</td>
+                                    <td class="amount-col">3 600 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Besoins vitaux</td>
+                                    <td class="amount-col">31 005 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Loyer et frais accessoires</td>
+                                    <td class="amount-col">6 480 CHF</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Total des dépenses</td>
+                                    <td class="amount-col" id="total_expenses_detail">142 895 CHF</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-col">
+                        <h4>Revenus pris en compte</h4>
+                        <table class="calculation-table">
+                            <tbody id="income_detail_table">
+                                <tr>
+                                    <td>Rentes AVS/AI</td>
+                                    <td class="amount-col">44 100 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Rentes LPP</td>
+                                    <td class="amount-col">15 000 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Autres rentes</td>
+                                    <td class="amount-col">0 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Revenus immobiliers</td>
+                                    <td class="amount-col">0 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Revenus d'activité lucrative (après franchise)</td>
+                                    <td class="amount-col">0 CHF</td>
+                                </tr>
+                                <tr>
+                                    <td>Imputation de la fortune</td>
+                                    <td class="amount-col" id="fortune_income_detail">20 000 CHF</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Total des revenus</td>
+                                    <td class="amount-col" id="total_income_detail">79 100 CHF</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="calculation-result" id="pc_calculation_result">
+                    Droit aux prestations complémentaires: 63 315 CHF/an
+                </div>
+
+                <div class="info-note">
+                    Calcul: Dépenses reconnues (142 895 CHF) - Revenus déterminants (79 100 CHF) = PC annuelles (63 315 CHF)
+                </div>
+
+                <h3>Situation de la fortune</h3>
+
+                <div class="fortune-section">
+                    <div class="fortune-title">Fortune mobilière</div>
+                    <table class="calculation-table">
+                        <tbody>
+                            <tr>
+                                <td>Fortune mobilière brute</td>
+                                <td class="amount-col" id="liquid_assets_detail">250 000 CHF</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="fortune-title" style="margin-top: 20px;">Résidence principale</div>
+                    <table class="calculation-table">
+                        <tbody>
+                            <tr>
+                                <td>Valeur du bien immobilier</td>
+                                <td class="amount-col" id="property_value_detail">1 000 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Dette hypothécaire</td>
+                                <td class="amount-col" id="mortgage_detail">200 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Valeur nette du bien immobilier</td>
+                                <td class="amount-col" id="net_property_detail">800 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Abattement sur résidence principale</td>
+                                <td class="amount-col" id="property_deduction">300 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Valeur après abattement</td>
+                                <td class="amount-col" id="property_after_deduction">500 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Exonération légale 2025</td>
+                                <td class="amount-col">300 000 CHF</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="rule-note" id="property_rule">
+                        <span style="font-weight: bold;">✓ Abattement sur le logement:</span> Un abattement de 300'000 CHF est appliqué sur la valeur nette de la résidence principale. Abattement majoré appliqué (cas particulier).
+                    </div>
+
+                    <div class="rule-note" id="fortune_rule">
+                        <span style="font-weight: bold;">✓ Règle 2025:</span> La résidence principale est exonérée car la fortune mobilière est inférieure à 200'000 CHF.
+                    </div>
+
+                    <div class="fortune-title" style="margin-top: 20px;">Fortune totale</div>
+                    <table class="calculation-table">
+                        <tbody>
+                            <tr>
+                                <td>Fortune totale avant franchise</td>
+                                <td class="amount-col" id="total_fortune_before">750 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Franchise légale</td>
+                                <td class="amount-col" id="fortune_franchise">50 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Fortune prise en compte pour l'imputation</td>
+                                <td class="amount-col" id="fortune_for_imputation">700 000 CHF</td>
+                            </tr>
+                            <tr>
+                                <td>Taux d'imputation</td>
+                                <td class="amount-col">20% (1/5)</td>
+                            </tr>
+                            <tr>
+                                <td>Montant imputé au revenu</td>
+                                <td class="amount-col" id="fortune_imputation">20 000 CHF</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <h3>Évolution de la fortune mobilière</h3>
                 <div class="chart-container">
                     <canvas id="fortuneChart"></canvas>
@@ -579,38 +873,9 @@
             </div>
 
             <div class="card">
-                <h3>Éligibilité aux prestations complémentaires</h3>
-                <p id="pc_eligibility" class="success-text">⚠️ La fortune mobilière passera sous le seuil d'éligibilité PC dès la 2ème année (2026). Une demande de PC sera possible à ce moment-là.</p>
-                <p><strong>Montant PC estimé: </strong><span id="pc_amount">82 710 CHF/an</span></p>
-                <p><em>Ce montant est une estimation. Le calcul officiel sera effectué par la caisse de compensation.</em></p>
-            </div>
-
-            <div class="card">
-                <h3>Détail du calcul</h3>
-
-                <h4>Dépenses</h4>
-                <div id="expenses_detail">
-                    <p>- Dépenses EMS: 91 250 CHF/an</p>
-                    <p>- Dépenses à domicile: 40 000 CHF/an</p>
-                    <p>- Primes maladie: 10 560 CHF/an</p>
-                    <p>- Frais médicaux: 0 CHF/an</p>
-                    <p><strong>Total: 141 810 CHF/an</strong></p>
-                </div>
-
-                <h4>Revenus</h4>
-                <div id="income_detail">
-                    <p>- Rentes AVS: 44 100 CHF/an</p>
-                    <p>- Rente LPP: 15 000 CHF/an</p>
-                    <p>- Autres revenus: 0 CHF/an</p>
-                    <p>- Revenus fortune: 0 CHF/an</p>
-                    <p><strong>Total: 59 100 CHF/an</strong></p>
-                </div>
-            </div>
-
-            <div class="card">
                 <h3>Recommandations</h3>
                 <ol id="recommendations">
-                    <li>Préparer une demande de PC pour début 2026 (ou avant si la fortune mobilière diminue plus rapidement que prévu)</li>
+                    <li>Préparer une demande de PC dès maintenant, car vous êtes déjà éligible selon la simulation</li>
                     <li>Consulter un spécialiste en assurances sociales pour optimiser la situation</li>
                     <li>Vérifier si des adaptations du logement de Madame sont nécessaires pour le maintien à domicile</li>
                     <li>Évaluer les options concernant le bien immobilier (conserver, vendre, etc.)</li>
@@ -743,23 +1008,94 @@
             const totalExpenses = parseFloat(document.getElementById('total_expenses').textContent.replace(/[^\d.-]/g, '')) || 0;
             const totalIncome = parseFloat(document.getElementById('total_income').textContent.replace(/[^\d.-]/g, '')) || 0;
             const liquidAssets = parseFloat(document.getElementById('liquid_assets').value) || 0;
+            const propertyValue = parseFloat(document.getElementById('property_value').value) || 0;
+            const mortgage = parseFloat(document.getElementById('mortgage').value) || 0;
+            const netProperty = propertyValue - mortgage;
 
-            // Calculer le déficit annuel
-            const annualDeficit = Math.max(0, totalExpenses - totalIncome);
+            // Calcul des dépenses reconnues (selon l'exemple)
+            const situation = document.getElementById('situation').value;
+            const numberOfPeople = situation === 'single' ? 1 : 2;
+            const ems1 = document.getElementById('ems1').value === 'ems';
+            const ems2 = document.getElementById('ems2').value === 'ems';
+            const emsCost = parseFloat(document.getElementById('ems_cost').value) || 0;
+            const healthInsurance = parseFloat(document.getElementById('health_insurance').value) || 0;
 
-            // Mettre à jour les résultats
-            document.getElementById('result_expenses').textContent = formatCurrency(totalExpenses);
-            document.getElementById('result_income').textContent = formatCurrency(totalIncome);
-            document.getElementById('annual_deficit').textContent = formatCurrency(annualDeficit);
+            // Calcul des dépenses reconnues selon l'exemple
+            let annualEmsCost = emsCost * 365;
+            let totalHealthInsuranceCost = healthInsurance * numberOfPeople;
+            let personalExpenses = 3600; // Montant fixe pour les dépenses personnelles en EMS
+            let vitalNeeds = 31005; // Besoins vitaux pour le conjoint à domicile
+            let housingCosts = 6480; // Loyer et frais accessoires
+
+            let totalRecognizedExpenses = annualEmsCost + totalHealthInsuranceCost + personalExpenses + vitalNeeds + housingCosts;
+
+            // Calcul de l'imputation de la fortune
+            // Abattement sur la résidence principale
+            const propertyDeduction = 300000;
+            const propertyAfterDeduction = Math.max(0, netProperty - propertyDeduction);
+
+            // Fortune totale prise en compte
+            let totalFortuneBeforeFranchise = liquidAssets + propertyAfterDeduction;
+
+            // Franchise sur la fortune
+            const fortuneFranchise = 50000; // Pour un couple
+
+            // Fortune prise en compte pour l'imputation
+            let fortuneForImputation = Math.max(0, totalFortuneBeforeFranchise - fortuneFranchise);
+
+            // Taux d'imputation (1/5 = 20%)
+            const imputationRate = 0.2;
+
+            // Montant imputé au revenu
+            let fortuneImputation = Math.round(fortuneForImputation * imputationRate);
+
+            // Revenus totaux déterminants
+            const avs = parseFloat(document.getElementById('avs').value) || 0;
+            const lpp = parseFloat(document.getElementById('lpp').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('other_income').value) || 0;
+
+            let totalDeterminantIncome = avs + lpp + otherIncome + fortuneImputation;
+
+            // Calcul du droit PC annuel
+            let annualPC = Math.max(0, totalRecognizedExpenses - totalDeterminantIncome);
+            let monthlyPC = Math.round(annualPC / 12);
+
+            // Répartition du montant PC
+            let emsShare = Math.round(monthlyPC * 0.75); // 75% pour le résident en EMS
+            let homeShare = Math.round(monthlyPC * 0.25); // 25% pour le conjoint à domicile
+
+            // Mise à jour des résultats
+            document.getElementById('monthly_pc').textContent = formatCurrency(monthlyPC, false);
+            document.getElementById('annual_pc').textContent = formatCurrency(annualPC) + ' par an';
+            document.getElementById('ems_pc_share').textContent = formatCurrency(emsShare, false) + ' / mois';
+            document.getElementById('home_pc_share').textContent = formatCurrency(homeShare, false) + ' / mois';
+
+            // Mise à jour des détails du calcul
+            document.getElementById('total_expenses_detail').textContent = formatCurrency(totalRecognizedExpenses);
+            document.getElementById('fortune_income_detail').textContent = formatCurrency(fortuneImputation);
+            document.getElementById('total_income_detail').textContent = formatCurrency(totalDeterminantIncome);
+            document.getElementById('pc_calculation_result').textContent = 'Droit aux prestations complémentaires: ' + formatCurrency(annualPC) + '/an';
+
+            // Mise à jour des détails de la fortune
+            document.getElementById('liquid_assets_detail').textContent = formatCurrency(liquidAssets);
+            document.getElementById('property_value_detail').textContent = formatCurrency(propertyValue);
+            document.getElementById('mortgage_detail').textContent = formatCurrency(mortgage);
+            document.getElementById('net_property_detail').textContent = formatCurrency(netProperty);
+            document.getElementById('property_deduction').textContent = formatCurrency(propertyDeduction);
+            document.getElementById('property_after_deduction').textContent = formatCurrency(propertyAfterDeduction);
+            document.getElementById('total_fortune_before').textContent = formatCurrency(totalFortuneBeforeFranchise);
+            document.getElementById('fortune_franchise').textContent = formatCurrency(fortuneFranchise);
+            document.getElementById('fortune_for_imputation').textContent = formatCurrency(fortuneForImputation);
+            document.getElementById('fortune_imputation').textContent = formatCurrency(fortuneImputation);
 
             // Calculer l'évolution de la fortune
-            calculateFortuneEvolution(liquidAssets, annualDeficit);
+            calculateFortuneEvolution(liquidAssets, Math.max(0, totalExpenses - totalIncome));
 
             // Mettre à jour les détails du calcul
             updateCalculationDetails();
 
             // Générer les recommandations
-            generateRecommendations();
+            generateRecommendations(annualPC > 0);
         }
 
         // Fonction pour calculer l'évolution de la fortune
@@ -828,38 +1164,8 @@
                 document.getElementById('fortune_conclusion').textContent = `Aucun déficit annuel, la fortune ne sera pas entamée.`;
             }
 
-            // Mettre à jour l'éligibilité PC
-            updatePCEligibility(fortuneData, labels);
-
             // Créer ou mettre à jour le graphique
             createFortuneChart(labels, fortuneData);
-        }
-
-        // Fonction pour mettre à jour l'éligibilité PC
-        function updatePCEligibility(fortuneData, years) {
-            const eligibilityThreshold = 100000;
-            let eligibleYear = null;
-
-            for (let i = 1; i < fortuneData.length; i++) {
-                if (fortuneData[i] <= eligibilityThreshold) {
-                    eligibleYear = years[i];
-                    break;
-                }
-            }
-
-            const pcEligibilityElement = document.getElementById('pc_eligibility');
-            const annualDeficit = parseFloat(document.getElementById('annual_deficit').textContent.replace(/[^\d.-]/g, '')) || 0;
-
-            if (eligibleYear) {
-                const yearsUntilEligible = parseInt(eligibleYear) - currentYear;
-                pcEligibilityElement.textContent = `⚠️ La fortune mobilière passera sous le seuil d'éligibilité PC dès la ${yearsUntilEligible}ème année (${eligibleYear}). Une demande de PC sera possible à ce moment-là.`;
-                pcEligibilityElement.className = 'success-text';
-                document.getElementById('pc_amount').textContent = `${formatCurrency(annualDeficit)}/an`;
-            } else {
-                pcEligibilityElement.textContent = `La fortune mobilière restera au-dessus du seuil d'éligibilité PC pendant au moins 10 ans.`;
-                pcEligibilityElement.className = 'warning-text';
-                document.getElementById('pc_amount').textContent = `Non applicable`;
-            }
         }
 
         // Fonction pour créer le graphique d'évolution de la fortune
@@ -914,72 +1220,11 @@
 
         // Fonction pour mettre à jour les détails du calcul
         function updateCalculationDetails() {
-            const situation = document.getElementById('situation').value;
-            const numberOfPeople = situation === 'single' ? 1 : 2;
-
-            const emsCost = parseFloat(document.getElementById('ems_cost').value) || 0;
-            const homeExpenses = parseFloat(document.getElementById('home_expenses').value) || 0;
-            const healthInsurance = parseFloat(document.getElementById('health_insurance').value) || 0;
-            const medicalExpenses = parseFloat(document.getElementById('medical_expenses').value) || 0;
-
-            const ems1 = document.getElementById('ems1').value === 'ems';
-            const ems2 = situation === 'couple' ? document.getElementById('ems2').value === 'ems' : false;
-
-            let annualEmsCost = 0;
-            if (ems1) {
-                annualEmsCost += emsCost * 365;
-            }
-            if (ems2) {
-                annualEmsCost += emsCost * 365;
-            }
-
-            const totalHealthInsurance = healthInsurance * numberOfPeople;
-
-            // Mettre à jour les détails des dépenses
-            let expensesDetail = '';
-            if (annualEmsCost > 0) {
-                expensesDetail += `<p>- Dépenses EMS: ${formatCurrency(annualEmsCost)}/an</p>`;
-            }
-            if (homeExpenses > 0) {
-                expensesDetail += `<p>- Dépenses à domicile: ${formatCurrency(homeExpenses)}/an</p>`;
-            }
-            expensesDetail += `<p>- Primes maladie: ${formatCurrency(totalHealthInsurance)}/an</p>`;
-            if (medicalExpenses > 0) {
-                expensesDetail += `<p>- Frais médicaux: ${formatCurrency(medicalExpenses)}/an</p>`;
-            }
-
-            const totalExpenses = annualEmsCost + homeExpenses + totalHealthInsurance + medicalExpenses;
-            expensesDetail += `<p><strong>Total: ${formatCurrency(totalExpenses)}/an</strong></p>`;
-
-            document.getElementById('expenses_detail').innerHTML = expensesDetail;
-
-            // Mettre à jour les détails des revenus
-            const avs = parseFloat(document.getElementById('avs').value) || 0;
-            const lpp = parseFloat(document.getElementById('lpp').value) || 0;
-            const otherIncome = parseFloat(document.getElementById('other_income').value) || 0;
-            const fortuneIncome = parseFloat(document.getElementById('fortune_income').value) || 0;
-
-            let incomeDetail = '';
-            incomeDetail += `<p>- Rentes AVS: ${formatCurrency(avs)}/an</p>`;
-            if (lpp > 0) {
-                incomeDetail += `<p>- Rente LPP: ${formatCurrency(lpp)}/an</p>`;
-            }
-            if (otherIncome > 0) {
-                incomeDetail += `<p>- Autres revenus: ${formatCurrency(otherIncome)}/an</p>`;
-            }
-            if (fortuneIncome > 0) {
-                incomeDetail += `<p>- Revenus fortune: ${formatCurrency(fortuneIncome)}/an</p>`;
-            }
-
-            const totalIncome = avs + lpp + otherIncome + fortuneIncome;
-            incomeDetail += `<p><strong>Total: ${formatCurrency(totalIncome)}/an</strong></p>`;
-
-            document.getElementById('income_detail').innerHTML = incomeDetail;
+            // Cette fonction est maintenant gérée directement dans calculateResults()
         }
 
         // Fonction pour générer des recommandations
-        function generateRecommendations() {
-            const annualDeficit = parseFloat(document.getElementById('annual_deficit').textContent.replace(/[^\d.-]/g, '')) || 0;
+        function generateRecommendations(isEligible) {
             const situation = document.getElementById('situation').value;
             const name1 = document.getElementById('name1').value || 'Personne 1';
             const name2 = document.getElementById('name2').value || 'Personne 2';
@@ -989,10 +1234,14 @@
             let recommendations = [];
 
             // Recommandation concernant les PC
-            const pcEligibilityText = document.getElementById('pc_eligibility').textContent;
-            if (pcEligibilityText.includes('sera possible')) {
-                const eligibleYear = pcEligibilityText.match(/\((\d+)\)/)[1];
-                recommendations.push(`Préparer une demande de PC pour début ${eligibleYear} (ou avant si la fortune mobilière diminue plus rapidement que prévu)`);
+            if (isEligible) {
+                recommendations.push(`Préparer une demande de PC dès maintenant, car vous êtes déjà éligible selon la simulation`);
+            } else {
+                const pcEligibilityText = document.getElementById('pc_eligibility') ? document.getElementById('pc_eligibility').textContent : '';
+                if (pcEligibilityText && pcEligibilityText.includes('sera possible')) {
+                    const eligibleYear = pcEligibilityText.match(/\((\d+)\)/)[1];
+                    recommendations.push(`Préparer une demande de PC pour début ${eligibleYear} (ou avant si la fortune mobilière diminue plus rapidement que prévu)`);
+                }
             }
 
             // Recommandation générale
@@ -1030,8 +1279,12 @@
         }
 
         // Fonction pour formater les montants en CHF
-        function formatCurrency(amount) {
-            return amount.toLocaleString('fr-CH') + ' CHF';
+        function formatCurrency(amount, includeDecimal = true) {
+            if (includeDecimal) {
+                return amount.toLocaleString('fr-CH') + ' CHF';
+            } else {
+                return Math.round(amount).toLocaleString('fr-CH') + ' CHF';
+            }
         }
 
         // Initialiser l'application
